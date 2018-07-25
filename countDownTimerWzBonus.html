@@ -1,0 +1,89 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="http://grgs.xyz/wp-content/plugins/FlipClock-master/compiled/flipclock.css">
+		
+		<link rel="stylesheet" href="http://www.torochainfinancial.com/wp-content/cache/autoptimize/css/autoptimize_53e9f7fb25cb8b0c053c49234418a6ac.css">
+		<link rel="stylesheet" href="http://www.torochainfinancial.com/wp-content/cache/autoptimize/css/autoptimize_a99ffddc3551389cf0b554a90d786906.css">
+
+		
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+		<script src="http://grgs.xyz/wp-content/plugins/FlipClock-master/compiled/flipclock.js"></script>	
+		
+	</head>
+	<body>
+		<h2 style="color:#000000;font-family:Montserrat;font-weight:400;font-style:normal"><span id="bonus"></span>
+		% bonus ends in:</h2>
+		<div class="countdownv2_holder clock" style="width: device-width; margin:2em;"></div>
+
+		<script type="text/javascript">
+			// Set dates.
+				var futureDate  = new Date("May 8, 2018 11:59 PM EDT"); // mgobran: will use this as the begining of the reset timer
+				var currentDate = new Date();
+				
+			
+			var clock;
+			
+			$(document).ready(function() {
+				//code for bonus adjustment
+				var oneDayMS = 1000*60*60*24;
+				var countdownDate = futureDate; 
+				var bonus = 100; // initial bonus
+				var reducePerDay = 10; // reduction in the bonus every day
+		  
+			  if (currentDate > countdownDate)
+				{
+					var daysDiff = currentDate.getTime() - countdownDate.getTime(); //get the difference in milliseconds
+					daysDiff = daysDiff / oneDayMS; //now daysDiff is in days
+					
+					var bonusReduce= Math.floor(daysDiff/reducePerDay);
+					
+					bonus -= bonusReduce;
+					if (bonus<0){
+						bonus = 0;
+						}
+				}
+
+				document.getElementById("bonus").innerHTML = bonus;
+			
+			
+			
+				//code for the counter
+				// Calculate the difference in seconds between the future and current date
+				var diff = futureDate.getTime() / 1000 - currentDate.getTime() / 1000;
+
+				// counter reset STARTS
+				var resetEvery = 24*60*60; // value in seconds
+				var newDiff = diff
+				 
+				while (diff <= 0){ //The reset every {resertEvery} seconds starts
+					var newDiff = diff + resetEvery;
+					diff = newDiff;
+				}
+				// counter reset ENDS
+				
+				// Calculate day difference and apply class to .clock for extra digit styling.
+				function dayDiff(first, second) {
+					return (second-first)/(1000*60*60*24);
+				}
+
+				if (dayDiff(currentDate, futureDate) < 100) {
+					$('.clock').addClass('twoDayDigits');
+				} else {
+					$('.clock').addClass('threeDayDigits');
+				}
+
+				if(diff < 0) {
+					diff = 0;
+				}
+
+				// Instantiate a coutdown FlipClock
+				clock = $('.clock').FlipClock(diff, {
+					clockFace: 'DailyCounter',
+					countdown: true
+				});
+			});
+		</script>
+		
+	</body>
+</html>
